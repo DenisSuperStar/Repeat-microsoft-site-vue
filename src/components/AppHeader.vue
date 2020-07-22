@@ -5,7 +5,6 @@
                 app
                 class="blue-grey lighten-5 white--text"
             >
-                <v-app-bar-nav-icon color="black"></v-app-bar-nav-icon>
                 <div class="d-flex align-center">
                     <v-img
                         alt="Vuetify Logo"
