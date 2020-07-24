@@ -11,7 +11,6 @@
                 >
                     <v-col
                         cols="12"
-                        
                         sm="8"
                         md="6"
                         lg="6"
@@ -49,13 +48,13 @@
                                             <v-btn
                                                 :disabled="!valid"
                                                 color="primary"
-                                                @click.prevent="validate"
+                                                @click.prevent="signup"
                                             >
                                                 Зарегистрироваться
                                             </v-btn>
                                             <v-btn
                                                 color="primary"
-                                                @click.prevent="reset, signup"
+                                                @click.prevent="reset"
                                             >
                                                 Очистить
                                             </v-btn>
@@ -66,14 +65,14 @@
                                             :disabled="!valid"
                                             color="primary"
                                             class="mb-3"
-                                            @click.prevent="validate"
+                                            @click.prevent="signup"
                                             block
                                         >
                                             Зарегистрироваться
                                         </v-btn>
                                         <v-btn
                                             color="primary"
-                                            @click.prevent="reset, signup"
+                                            @click.prevent="reset"
                                             block
                                         >
                                             Очистить
@@ -91,7 +90,6 @@
 
 <script>
 import * as firebase from 'firebase/app'
-
 export default {
     data: () => ({
         email: '',
@@ -126,7 +124,6 @@ export default {
         },
         watchWidth: function() {
             this.width = window.innerWidth;
-
             if (this.width < 350) {
                 this.selectedLayout = false;
             } else this.selectedLayout = true;
