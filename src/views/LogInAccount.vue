@@ -65,6 +65,7 @@
 import * as firebase from 'firebase/app'
 import Vue from 'vue'
 import Toolbar from '../components/Toolbar.vue'
+import store from '../store/index.js'
 
 Vue.component('toolbar', Toolbar);
 
@@ -88,6 +89,8 @@ export default {
             firebase.auth().signInWithEmailAndPassword(this.email, this.password)
                 .then(login => {
                     console.log(login);
+                    const status_auth = true
+                    this.commit('UPDATE_STATUS_AUTH', status_auth);
                     this.$router.push('/');
                 })
                 .catch(function(error) {
@@ -100,6 +103,9 @@ export default {
         reset: function() {
             this.$refs.form.reset()
         }
+    },
+    created: function() {
+        store.dispatch('PROCESSING_COMPLETE_AUTH');
     },
     mounted: function() {
         this.validate();
