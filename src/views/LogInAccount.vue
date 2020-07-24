@@ -17,13 +17,7 @@
                         xl="6"
                     >
                         <v-card class="elevation-12">
-                            <v-toolbar
-                                color="primary"
-                                dark
-                                flat
-                            >
-                                <v-toolbar-title>Войти</v-toolbar-title>
-                            </v-toolbar>
+                            <toolbar :title="toolbarTitle" />
                             <v-card-text>
                                 <v-form
                                     ref="form"
@@ -42,40 +36,21 @@
                                         label="Ваш пароль"
                                         required
                                     ></v-text-field>
-                                    <template v-if="selectedLayout">
-                                        <v-card-actions>
-                                            <v-btn
-                                                :disabled="!valid"
-                                                color="primary"
-                                                @click="login"
-                                            >
-                                                Войти
-                                            </v-btn>
-                                            <v-btn
-                                                color="primary"
-                                                @click="reset"
-                                            >
-                                                Очистить
-                                            </v-btn>
-                                        </v-card-actions>
-                                    </template>
-                                    <template v-else>
+                                    <v-card-actions>
                                         <v-btn
                                             :disabled="!valid"
                                             color="primary"
-                                            class="mb-3"
-                                            @click="login"
-                                            block
+                                            @click.prevent="login"
                                         >
                                             Вход
                                         </v-btn>
                                         <v-btn
                                             color="primary"
-                                            @click="reset"
+                                            @click.prevent="reset"
                                         >
                                             Очистить
                                         </v-btn>
-                                    </template>
+                                    </v-card-actions>
                                 </v-form>
                             </v-card-text>
                         </v-card>
@@ -88,13 +63,17 @@
 
 <script> 
 import * as firebase from 'firebase/app'
+import Vue from 'vue'
+import Toolbar from '../components/Toolbar.vue'
+
+Vue.component('toolbar', Toolbar);
 
 export default {
     data: () => ({
+        toolbarTitle: 'Авторизация',
+        valid: true,
         email: '',
         password: '',
-        valid: true,
-        name: '',
         passwordRules: [
             v => !!v || 'Password is required',
             v => (v && v.length <= 10) || 'Password must be less than 10 characters',
@@ -102,14 +81,14 @@ export default {
         emailRules: [
             v => !!v || 'E-mail is required',
             v => /.+@.+\..+/.test(v) || 'E-mail must be valid string',
-        ],
-        selectedLayout: true 
+        ] 
     }),
     methods: {
         login: function() {
             firebase.auth().signInWithEmailAndPassword(this.email, this.password)
                 .then(login => {
                     console.log(login);
+                    this.$router.push('/');
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -120,18 +99,10 @@ export default {
         },
         reset: function() {
             this.$refs.form.reset()
-        },
-        watchWidth: function() {
-            this.width = window.innerWidth;
-
-            if (this.width < 350) {
-                this.selectedLayout = false;
-            } else this.selectedLayout = true;
         }
     },
-    created: function() {
-        window.addEventListener('resize', this.watchWidth);
-        this.watchWidth();
+    mounted: function() {
+        this.validate();
     }
 }
 </script>

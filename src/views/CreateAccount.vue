@@ -17,13 +17,7 @@
                         xl="6"
                     >
                         <v-card class="elevation-12">
-                            <v-toolbar
-                                color="primary"
-                                dark
-                                flat
-                            >
-                                <v-toolbar-title>Регистрация</v-toolbar-title>
-                            </v-toolbar>
+                            <toolbar :title="toolbarTitle" />
                             <v-card-text>
                                 <v-form
                                     ref="form"
@@ -36,14 +30,31 @@
                                         label="Ваш эл.адрес"
                                         required
                                     ></v-text-field>
-
                                     <v-text-field
                                         v-model="password"
                                         :rules="passwordRules"
                                         label="Ваш пароль"
                                         required
                                     ></v-text-field>
-                                    <template v-if="selectedLayout">
+                                    <template v-if="layoutSelect">
+                                        <v-btn
+                                            :disabled="!valid"
+                                            color="primary"
+                                            class="mb-3"
+                                            @click="signup"
+                                            block
+                                        >
+                                            Зарегистрироваться
+                                        </v-btn>
+                                        <v-btn
+                                            color="primary"
+                                            @click.prevent="reset"
+                                            block
+                                        >
+                                            Очистить
+                                        </v-btn>
+                                    </template>
+                                    <template v-else>
                                         <v-card-actions>
                                             <v-btn
                                                 :disabled="!valid"
@@ -60,24 +71,6 @@
                                             </v-btn>
                                         </v-card-actions>
                                     </template>
-                                    <template v-else>
-                                        <v-btn
-                                            :disabled="!valid"
-                                            color="primary"
-                                            class="mb-3"
-                                            @click.prevent="signup"
-                                            block
-                                        >
-                                            Зарегистрироваться
-                                        </v-btn>
-                                        <v-btn
-                                            color="primary"
-                                            @click.prevent="reset"
-                                            block
-                                        >
-                                            Очистить
-                                        </v-btn>
-                                    </template>
                                 </v-form>
                             </v-card-text>
                         </v-card>
@@ -90,12 +83,18 @@
 
 <script>
 import * as firebase from 'firebase/app'
+import Vue from 'vue'
+import Toolbar from '../components/Toolbar.vue'
+
+Vue.component('toolbar', Toolbar);
+
 export default {
     data: () => ({
+        toolbarTitle: 'Регистрация',
+        valid: true,
         email: '',
         password: '',
-        valid: true,
-        name: '',
+        layoutSelect: false,
         passwordRules: [
             v => !!v || 'Password is required',
             v => (v && v.length <= 10) || 'Password must be less than 10 characters',
@@ -103,20 +102,20 @@ export default {
         emailRules: [
             v => !!v || 'E-mail is required',
             v => /.+@.+\..+/.test(v) || 'E-mail must be valid string',
-        ],
-        selectedLayout: true
+        ]
     }),
     methods: {
         signup: function() {
             firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
                 .then(account => {
                     console.log(account);
+                    this.$router.push('/');
                 })
-                .catch(function(error) {
+                .catch(error => {
                     console.log(error);
                 })
         },
-        validate () {
+        validate: function() {
             this.$refs.form.validate()
         },
         reset: function() {
@@ -124,14 +123,18 @@ export default {
         },
         watchWidth: function() {
             this.width = window.innerWidth;
+
             if (this.width < 350) {
-                this.selectedLayout = false;
-            } else this.selectedLayout = true;
+                this.layoutSelect = true;
+            } else this.layoutSelect = false;
         }
     },
     created: function() {
         window.addEventListener('resize', this.watchWidth);
         this.watchWidth();
+    },
+    mounted: function() {
+        this.validate();
     }
 }
 </script>
