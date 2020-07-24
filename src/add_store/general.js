@@ -1,25 +1,20 @@
 export default {
     state: {
-        processing: false,
-        error: null
-    },
-    mutations: {
-        SET_PROCESSING(state, payload) {
-            state.processing = payload
-        },
-        SET_ERROR(state, payload) {
-            state.error = payload
-        },
-        CLEAN_ERROR(state) {
-            state.error = null
-        }
+        isAuthenticated: false
     },
     getters: {
-        GET_PROCESSING: state => {
-            return state.processing
-        },
-        GET_ERROR: state => {
-            return state.error
+        READ_AUTH: state => {
+            return state.isAuthenticated
+        }
+    },
+    mutations: {
+        UPDATE_STATUS_AUTH: (state, payload) => {
+            state.isAuthenticated = payload;
+        }
+    },
+    actions: {
+        PROCESSING_COMPLETE_AUTH ({commit}, changeAuth) {
+            commit('UPDATE_STATUS_AUTH', changeAuth)
         }
     }
 }
