@@ -16,7 +16,8 @@
                     />
                     <v-toolbar-title>Sedby</v-toolbar-title>
                 </div>
-                <template v-for="(icon, id) in icons_names">
+                <v-spacer></v-spacer>
+                <template v-for="(icon, id) in appHeaderIcons">
                     <v-btn
                         :key="id"
                         v-show="id <= 4"
@@ -26,8 +27,7 @@
                         <v-icon>$vuetify.icons.{{icon.pic}}</v-icon>
                     </v-btn>
                 </template>
-                <v-spacer></v-spacer>
-                <template v-for="(icon, id, key) in icons_names">
+                <template v-for="(icon, id, key) in appHeaderIcons">
                     <v-btn
                         :key="key"
                         v-show="id > 4"
@@ -45,44 +45,59 @@
 </template>
 
 <script>
+import store from '../store/index.js'
+
 export default {
-    data: () => ({
-        icons_names: [
-            {
-                pic: 'microsoft'
-            },
-            {
-                pic: 'window'
-            },
-            {
-                pic: 'office'
-            },
-            {
-                pic: 'xbox'
-            },
-            {
-                pic: 'support'
-            },
-            {
-                pic: 'all_softwares'
-            },
-            {
-                pic: 'search'
-            },
-            {
-                pic: 'shopping_cart'
-            },
-            {
-                pic: 'account'
-            },
-            {
-                pic: 'login'
-            },
-            {
-                pic: 'logout'
+    computed: {
+        statusAuthentication: function() {
+            return this.$store.getters.READ_AUTH;
+        },
+        appHeaderIcons: function() {
+            if (this.statusAuthentication) {
+                return [
+                    {
+                        pic: 'microsoft'
+                    },
+                    {
+                        pic: 'window' 
+                    },
+                    {
+                        pic: 'office'
+                    },
+                    {
+                        pic: 'xbox'
+                    },
+                    {
+                        pic: 'shopping_cart'
+                    },
+                    {
+                        pic: 'logout'
+                    }
+                ]
+            } else {
+                return [
+                    {
+                        pic: 'support'
+                    },
+                    {
+                        pic: 'all_softwares'
+                    },
+                    {
+                        pic: 'search' 
+                    },
+                    {
+                        pic: 'account'
+                    },
+                    {
+                        pic: 'login'
+                    }
+                ]
             }
-        ]
-    })
+        }
+    },
+    created: function() {
+        store.dispatch('PROCESSING_COMPLETE_AUTH');
+    }
 }
 </script>
 
