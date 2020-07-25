@@ -45,12 +45,14 @@
 </template>
 
 <script>
-import store from '../store/index.js'
-
 export default {
+    /*data: () => ({
+        activeStatus: false
+    }),*/
     computed: {
         statusAuthentication: function() {
-            return this.$store.getters.READ_AUTH;
+            /*return this.$store.getters.READ_AUTH;*/
+            return false;
         },
         appHeaderIcons: function() {
             if (this.statusAuthentication) {
@@ -95,9 +97,17 @@ export default {
             }
         }
     },
-    created: function() {
-        store.dispatch('PROCESSING_COMPLETE_AUTH');
-    }
+    /*methods: {
+        makeStatus: function(status_auth) {
+            this.activeStatus = status_auth;
+        }
+    },*/
+    /*created: function() {
+        bus.$on('change-status', this.makeStatus);
+        console.log(this.activeStatus);
+        this.$root.$on('change-status', this.makeStatus);
+        console.log(this.activeStatus);
+    }*/
 }
 </script>
 
