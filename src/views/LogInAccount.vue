@@ -72,7 +72,6 @@
 import * as firebase from 'firebase/app'
 import Vue from 'vue'
 import Toolbar from '../components/Toolbar.vue'
-import store from '../store/index.js'
 import HandleError from '../components/HandleError.vue'
 
 Vue.component('toolbar', Toolbar);
@@ -86,9 +85,9 @@ export default {
         valid: true,
         email: '',
         password: '',
-        errorCode: '200',
-        errorMessage: 'Success',
-        isErrorExist: false,
+        errorCode: '200',//
+        errorMessage: 'Success',//
+        isErrorExist: false,//
         passwordRules: [
             v => !!v || 'Password is required',
             v => (v && v.length <= 10) || 'Password must be less than 10 characters',
@@ -120,9 +119,6 @@ export default {
         reset: function() {
             this.$refs.form.reset()
         }
-    },
-    created: function() {
-        store.dispatch('PROCESSING_COMPLETE_AUTH');
     },
     mounted: function() {
         this.validate();

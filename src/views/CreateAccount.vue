@@ -94,7 +94,6 @@
 import * as firebase from 'firebase/app'
 import Vue from 'vue'
 import Toolbar from '../components/Toolbar.vue'
-import store from '../store/index.js'
 import HandleError from '../components/HandleError.vue'
 
 Vue.component('toolbar', Toolbar);
@@ -152,7 +151,6 @@ export default {
     created: function() {
         window.addEventListener('resize', this.watchWidth);
         this.watchWidth();
-        store.dispatch('PROCESSING_COMPLETE_AUTH');
     },
     mounted: function() {
         this.validate();
