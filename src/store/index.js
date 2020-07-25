@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import userModule from '../add_store/user.js'
-import generalModule from '../add_store/general.js'
+import authSettings from '../add_store/userAuthSettings.js'
+import commonSettings from '../add_store/generalSettings.js'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
  modules: {
-   generalModule,
-   userModule
+   authSettings,
+   commonSettings
  }
 })
