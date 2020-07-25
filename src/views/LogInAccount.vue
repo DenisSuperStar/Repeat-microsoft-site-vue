@@ -39,13 +39,15 @@
                                     <v-card-actions>
                                         <v-btn
                                             :disabled="!valid"
-                                            color="primary"
+                                            color="black"
+                                            class="white--text"
                                             @click.prevent="login"
                                         >
                                             Вход
                                         </v-btn>
                                         <v-btn
-                                            color="primary"
+                                            color="black"
+                                            class="white--text"
                                             @click.prevent="reset"
                                         >
                                             Очистить
@@ -54,6 +56,11 @@
                                 </v-form>
                             </v-card-text>
                         </v-card>
+                        <handle-error
+                            v-if="this.isErrorExist" 
+                            :errorCode="this.errorCode" 
+                            :errorMessage="this.errorMessage" 
+                        ></handle-error>
                     </v-col>
                 </v-row>
             </v-container>
@@ -66,8 +73,12 @@ import * as firebase from 'firebase/app'
 import Vue from 'vue'
 import Toolbar from '../components/Toolbar.vue'
 import store from '../store/index.js'
+import HandleError from '../components/HandleError.vue'
 
 Vue.component('toolbar', Toolbar);
+Vue.component('handle-error', HandleError);
+
+var status_auth;
 
 export default {
     data: () => ({
@@ -75,6 +86,9 @@ export default {
         valid: true,
         email: '',
         password: '',
+        errorCode: '200',
+        errorMessage: 'Success',
+        isErrorExist: false,
         passwordRules: [
             v => !!v || 'Password is required',
             v => (v && v.length <= 10) || 'Password must be less than 10 characters',
@@ -87,15 +101,18 @@ export default {
     methods: {
         login: function() {
             firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-                .then(login => {
-                    console.log(login);
-                    const status_auth = true
-                    this.commit('UPDATE_STATUS_AUTH', status_auth);
-                    this.$router.push('/');
+                .then(() => {
+                    status_auth = true;
+                    this.$store.dispatch('PROCESSING_COMPLETE_AUTH', status_auth);
+                    if (this.$store.getters.READ_AUTH) {this.$router.push('/');}
+                    
                 })
-                .catch(function(error) {
-                    console.log(error);
+                .catch((error) => {
+                    this.isErrorExist = true;
+                    this.errorCode = error.code;
+                    this.errorMessage = error.message;
                 });
+                this.isErrorExist = false;
         },
         validate: function() {
             this.$refs.form.validate()

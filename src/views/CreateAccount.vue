@@ -39,15 +39,17 @@
                                     <template v-if="layoutSelect">
                                         <v-btn
                                             :disabled="!valid"
-                                            color="primary"
-                                            class="mb-3"
+                                            dark
+                                            color="black"
+                                            class="mb-3 white--text"
                                             @click="signup"
                                             block
                                         >
                                             Зарегистрироваться
                                         </v-btn>
                                         <v-btn
-                                            color="primary"
+                                            dark
+                                            class="white--text"
                                             @click.prevent="reset"
                                             block
                                         >
@@ -58,13 +60,15 @@
                                         <v-card-actions>
                                             <v-btn
                                                 :disabled="!valid"
-                                                color="primary"
+                                                color="black"
+                                                class="white--text"
                                                 @click.prevent="signup"
                                             >
                                                 Зарегистрироваться
                                             </v-btn>
                                             <v-btn
-                                                color="primary"
+                                                color="black"
+                                                class="white--text"
                                                 @click.prevent="reset"
                                             >
                                                 Очистить
@@ -74,6 +78,11 @@
                                 </v-form>
                             </v-card-text>
                         </v-card>
+                        <handle-error
+                            v-if="this.isErrorExist" 
+                            :errorCode="this.errorCode" 
+                            :errorMessage="this.errorMessage" 
+                        ></handle-error>
                     </v-col>
                 </v-row>
             </v-container>
@@ -86,8 +95,10 @@ import * as firebase from 'firebase/app'
 import Vue from 'vue'
 import Toolbar from '../components/Toolbar.vue'
 import store from '../store/index.js'
+import HandleError from '../components/HandleError.vue'
 
 Vue.component('toolbar', Toolbar);
+Vue.component('handle-error', HandleError);
 
 export default {
     data: () => ({
@@ -96,6 +107,9 @@ export default {
         email: '',
         password: '',
         layoutSelect: false,
+        errorCode: '200',
+        errorMessage: 'Success',
+        isErrorExist: false,
         passwordRules: [
             v => !!v || 'Password is required',
             v => (v && v.length <= 10) || 'Password must be less than 10 characters',
@@ -111,12 +125,15 @@ export default {
                 .then(account => {
                     console.log(account);
                     const status_auth = true
-                    this.commit('UPDATE_STATUS_AUTH', status_auth)
-                    this.$router.push('/');
+                    this.$store.dispatch('PROCESSING_COMPLETE_AUTH', status_auth);
+                    if (this.$store.getters.READ_AUTH) {this.$router.push('/');}
                 })
                 .catch(error => {
-                    console.log(error);
+                    this.isErrorExist = true;
+                    this.errorCode = error.code;
+                    this.errorMessage = error.message;
                 })
+                this.isErrorExist = false;
         },
         validate: function() {
             this.$refs.form.validate()
