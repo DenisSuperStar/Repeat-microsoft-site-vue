@@ -1,8 +1,8 @@
 <template>
     <div>
         <v-toolbar
-            color="primary"
-            dark
+            color="black"
+            class="white--text"
             flat
         >
             <v-toolbar-title>{{title}}</v-toolbar-title>
