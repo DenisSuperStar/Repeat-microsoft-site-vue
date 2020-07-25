@@ -96,18 +96,7 @@ export default {
                 ]
             }
         }
-    },
-    /*methods: {
-        makeStatus: function(status_auth) {
-            this.activeStatus = status_auth;
-        }
-    },*/
-    /*created: function() {
-        bus.$on('change-status', this.makeStatus);
-        console.log(this.activeStatus);
-        this.$root.$on('change-status', this.makeStatus);
-        console.log(this.activeStatus);
-    }*/
+    }
 }
 </script>
 
