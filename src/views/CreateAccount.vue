@@ -106,9 +106,9 @@ export default {
         email: '',
         password: '',
         layoutSelect: false,
-        errorCode: '200',
-        errorMessage: 'Success',
-        isErrorExist: false,
+        errorCode: '200',//
+        errorMessage: 'Success',//
+        isErrorExist: false,//
         passwordRules: [
             v => !!v || 'Password is required',
             v => (v && v.length <= 10) || 'Password must be less than 10 characters',
