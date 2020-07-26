@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import Account from '../views/CreateAccount.vue'
 import LogInAccount from '../views/LogInAccount.vue'
+import Home from '../views/Home.vue'
 
 
 Vue.use(VueRouter)
@@ -10,8 +10,18 @@ Vue.use(VueRouter)
   const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home
+  },
+  {
+    path: '/account',
+    name: 'account',
+    component: Account
+  },
+  {
+    path: '/login',
+    name: 'enter',
+    component: LogInAccount
   },
   {
     path: '/news',
@@ -47,16 +57,6 @@ Vue.use(VueRouter)
     path: '/cart',
     name: 'purchases',
     component: () => import('../views/ItemsCart.vue')
-  },
-  {
-    path: '/account',
-    name: 'regist',
-    component: Account
-  },
-  {
-    path: '/login',
-    name: 'enter',
-    component: LogInAccount
   }
 ]
 
