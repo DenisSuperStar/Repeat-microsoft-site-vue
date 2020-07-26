@@ -121,6 +121,10 @@ export default {
             firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
                 .then(() => {
                     this.$store.dispatch('PROCESSING_SET_STATUS_USER_ACCOUNT');
+                    
+                    if (this.$store.getters.CHECK_STATUS_USER_ACCOUNT) {
+                        this.$router.push('/');
+                    }
                 })
                 .catch(error => {
                     this.$store.dispatch('PROCESSING_UPDATE_STATUS_ERROR', !this.isErrorExist);

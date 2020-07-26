@@ -98,6 +98,10 @@ export default {
             firebase.auth().signInWithEmailAndPassword(this.email, this.password)
                 .then(() => {
                     this.$store.dispatch('PROCESSING_SET_STATUS_AUTH');
+                    
+                    if (this.$store.getters.CHECK_STATUS_AUTH) {
+                        this.$router.push('/');
+                    }
                 })
                 .catch((error) => {
                     this.isErrorExist = true;
