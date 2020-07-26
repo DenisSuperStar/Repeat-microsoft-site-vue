@@ -3,18 +3,18 @@ export default {
         isAuthenticated: false
     },
     getters: {
-        READ_AUTH: state => {
+        CHECK_STATUS_AUTH: state => {
             return state.isAuthenticated;
         }
     },
     mutations: {
-        UPDATE_STATUS_AUTH: (state, payload) => {
-            state.isAuthenticated = payload;
+        SET_STATUS_AUTH: state => {
+            state.isAuthenticated = true;
         }
     },
     actions: {
-        PROCESSING_COMPLETE_AUTH ({commit}, changeAuth) {
-            commit('UPDATE_STATUS_AUTH', changeAuth)
+        PROCESSING_SET_STATUS_AUTH ({commit}) {
+            commit('SET_STATUS_AUTH');
         }
     }
 }
