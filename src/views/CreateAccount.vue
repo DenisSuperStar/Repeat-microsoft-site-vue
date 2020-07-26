@@ -1,6 +1,6 @@
 <template>
-    <v-app>
-        <div>
+    <div>
+        <v-app>
             <v-container
                 class="fill-height"
                 fluid
@@ -16,78 +16,78 @@
                         lg="6"
                         xl="6"
                     >
-                        <v-card class="elevation-12">
-                            <toolbar :title="toolbarTitle" />
-                            <v-card-text>
-                                <v-form
-                                    ref="form"
-                                    v-model="valid"
-                                    lazy-validation
-                                >
-                                    <v-text-field
-                                        v-model="email"
-                                        :rules="emailRules"
-                                        label="Ваш эл.адрес"
-                                        required
-                                    ></v-text-field>
-                                    <v-text-field
-                                        v-model="password"
-                                        :rules="passwordRules"
-                                        label="Ваш пароль"
-                                        required
-                                    ></v-text-field>
-                                    <template v-if="layoutSelect">
+                    <v-card class="elevation-12">
+                        <toolbar :title="toolbarTitle" />
+                        <v-card-text>
+                            <v-form
+                                ref="form"
+                                v-model="valid"
+                                lazy-validation
+                            >
+                                <v-text-field
+                                    v-model="email"
+                                    :rules="emailRules"
+                                    label="Ваш эл.адрес"
+                                    required
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model="password"
+                                    :rules="passwordRules"
+                                    label="Ваш пароль"
+                                    required
+                                ></v-text-field>
+                                <template v-if="layoutSelect">
+                                    <v-btn
+                                        :disabled="!valid"
+                                        dark
+                                        color="black"
+                                        class="mb-3 white--text"
+                                        @click="signup"
+                                        block
+                                    >
+                                        Зарегистрироваться
+                                    </v-btn>
+                                    <v-btn
+                                        dark
+                                        class="white--text"
+                                        @click.prevent="reset"
+                                        block
+                                    >
+                                        Очистить
+                                    </v-btn>
+                                </template>
+                                <template v-else>
+                                    <v-card-actions>
                                         <v-btn
                                             :disabled="!valid"
-                                            dark
                                             color="black"
-                                            class="mb-3 white--text"
-                                            @click="signup"
-                                            block
+                                            class="white--text"
+                                            @click.prevent="signup"
                                         >
                                             Зарегистрироваться
                                         </v-btn>
                                         <v-btn
-                                            dark
+                                            color="black"
                                             class="white--text"
                                             @click.prevent="reset"
-                                            block
                                         >
                                             Очистить
                                         </v-btn>
-                                    </template>
-                                    <template v-else>
-                                        <v-card-actions>
-                                            <v-btn
-                                                :disabled="!valid"
-                                                color="black"
-                                                class="white--text"
-                                                @click.prevent="signup"
-                                            >
-                                                Зарегистрироваться
-                                            </v-btn>
-                                            <v-btn
-                                                color="black"
-                                                class="white--text"
-                                                @click.prevent="reset"
-                                            >
-                                                Очистить
-                                            </v-btn>
-                                        </v-card-actions>
-                                    </template>
-                                </v-form>
-                            </v-card-text>
-                        </v-card>
-                        <handle-error
-                            v-if="this.isErrorExist" 
-                            :errorCode="this.errorCode" 
-                            :errorMessage="this.errorMessage" 
-                        ></handle-error>
+                                    </v-card-actions>
+                                </template>
+                            </v-form>
+                        </v-card-text>
+                    </v-card>
+                    <handle-error
+                        v-if="this.$store.getters.CHECK_ERROR_EXIST" 
+                        :errorCode="this.$store.getters.READ_ERROR_CODE" 
+                        :errorMessage="this.$store.getters.READ_ERROR_MESSAGE" 
+                    ></handle-error>    
                     </v-col>
                 </v-row>
             </v-container>
-        </div>
-    </v-app>
+        </v-app>
+    </div>
 </template>
 
 <script>
@@ -106,9 +106,7 @@ export default {
         email: '',
         password: '',
         layoutSelect: false,
-        errorCode: '200',//
-        errorMessage: 'Success',//
-        isErrorExist: false,//
+        account: null,
         passwordRules: [
             v => !!v || 'Password is required',
             v => (v && v.length <= 10) || 'Password must be less than 10 characters',
@@ -121,18 +119,16 @@ export default {
     methods: {
         signup: function() {
             firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
-                .then(account => {
-                    console.log(account);
-                    const status_auth = true
-                    this.$store.dispatch('PROCESSING_COMPLETE_AUTH', status_auth);
-                    if (this.$store.getters.READ_AUTH) {this.$router.push('/');}
+                .then(() => {
+                    this.$store.dispatch('PROCESSING_SET_STATUS_USER_ACCOUNT');
                 })
                 .catch(error => {
-                    this.isErrorExist = true;
-                    this.errorCode = error.code;
-                    this.errorMessage = error.message;
+                    this.$store.dispatch('PROCESSING_UPDATE_STATUS_ERROR', !this.isErrorExist);
+                    this.$store.dispatch('PROCESSING_UPDATE_STATE_ERROR_CODE', error.code);
+                    this.$store.dispatch('PROCESSING_UPDATE_ERROR_MESSAGE', error.message);
                 })
-                this.isErrorExist = false;
+                const isExists = false;
+                this.$store.dispatch('PROCESSING_UPDATE_STATUS_ERROR', isExists);
         },
         validate: function() {
             this.$refs.form.validate()

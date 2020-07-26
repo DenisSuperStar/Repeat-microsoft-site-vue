@@ -77,17 +77,13 @@ import HandleError from '../components/HandleError.vue'
 Vue.component('toolbar', Toolbar);
 Vue.component('handle-error', HandleError);
 
-var status_auth;
-
 export default {
     data: () => ({
         toolbarTitle: 'Авторизация',
         valid: true,
         email: '',
         password: '',
-        errorCode: '200',//
-        errorMessage: 'Success',//
-        isErrorExist: false,//
+        status_auth: false,
         passwordRules: [
             v => !!v || 'Password is required',
             v => (v && v.length <= 10) || 'Password must be less than 10 characters',
@@ -101,10 +97,7 @@ export default {
         login: function() {
             firebase.auth().signInWithEmailAndPassword(this.email, this.password)
                 .then(() => {
-                    status_auth = true;
-                    this.$store.dispatch('PROCESSING_COMPLETE_AUTH', status_auth);
-                    if (this.$store.getters.READ_AUTH) {this.$router.push('/');}
-                    
+                    this.$store.dispatch('PROCESSING_SET_STATUS_AUTH');
                 })
                 .catch((error) => {
                     this.isErrorExist = true;
