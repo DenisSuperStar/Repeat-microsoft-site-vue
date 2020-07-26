@@ -24,7 +24,9 @@
                         icon
                         color="black"
                     >
-                        <v-icon>$vuetify.icons.{{icon.pic}}</v-icon>
+                        <v-icon>
+                            <router-link tag="span" :to="icon.url">$vuetify.icons.{{icon.pic}}</router-link>
+                        </v-icon>
                     </v-btn>
                 </template>
                 <template v-for="(icon, id, key) in appHeaderIcons">
@@ -35,7 +37,7 @@
                         color="black"
                     >
                         <v-icon>
-                            $vuetify.icons.{{icon.pic}}
+                            <router-link tag="span" :to="icon.url">$vuetify.icons.{{icon.pic}}</router-link>
                         </v-icon>
                     </v-btn>
                 </template>
@@ -51,40 +53,40 @@ export default {
             if ((this.$store.getters.CHECK_STATUS_USER_ACCOUNT) || (this.$store.getters.CHECK_STATUS_AUTH)) {
                 return [
                     {
-                        pic: 'microsoft'
+                        pic: 'microsoft', url: '/ideas'
                     },
                     {
-                        pic: 'window' 
+                        pic: 'office', url: '/solutions' 
                     },
                     {
-                        pic: 'office'
+                        pic: 'window', url: '/news'
                     },
                     {
-                        pic: 'xbox'
+                        pic: 'xbox', url: '/play'
                     },
                     {
-                        pic: 'shopping_cart'
+                        pic: 'shopping_cart', url: '/cart'
                     },
                     {
-                        pic: 'logout'
+                        pic: 'logout', url: ''
                     }
                 ]
             } else {
                 return [
                     {
-                        pic: 'support'
+                        pic: 'support', url: '/support'
                     },
                     {
-                        pic: 'all_softwares'
+                        pic: 'all_softwares', url: '/release'
                     },
                     {
-                        pic: 'search' 
+                        pic: 'search', url: '' 
                     },
                     {
-                        pic: 'account'
+                        pic: 'account', url: '/account'
                     },
                     {
-                        pic: 'login'
+                        pic: 'login', url: '/login'
                     }
                 ]
             }
