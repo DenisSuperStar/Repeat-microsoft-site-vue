@@ -42,18 +42,13 @@
 </template>
 
 <script>
-import store from '../store/index.js'
-
 export default {
     data: () => ({
         drawer: false
     }),
     computed: {
-        statusAuthentication: function() {
-            return this.$store.getters.READ_AUTH;
-        },
         appHeaderIcons: function() {
-            if (this.statusAuthentication) {
+            if ((this.$store.getters.CHECK_STATUS_USER_ACCOUNT) || (this.$store.getters.CHECK_STATUS_AUTH)) {
                 return [
                     {
                         pic: 'microsoft', name: 'Microsoft'
@@ -96,7 +91,8 @@ export default {
         }
     },
     created: function() {
-        store.dispatch('PROCESSING_COMPLETE_AUTH');
+        this.$store.dispatch('PROCESSING_SET_STATUS_USER_ACCOUNT');
+        this.$store.dispatch('PROCESSING_SET_STATUS_AUTH');
     }
 }
 </script>

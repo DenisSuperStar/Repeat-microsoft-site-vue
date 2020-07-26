@@ -46,16 +46,9 @@
 
 <script>
 export default {
-    /*data: () => ({
-        activeStatus: false
-    }),*/
     computed: {
-        statusAuthentication: function() {
-            /*return this.$store.getters.READ_AUTH;*/
-            return false;
-        },
         appHeaderIcons: function() {
-            if (this.statusAuthentication) {
+            if ((this.$store.getters.CHECK_STATUS_USER_ACCOUNT) || (this.$store.getters.CHECK_STATUS_AUTH)) {
                 return [
                     {
                         pic: 'microsoft'
@@ -96,6 +89,10 @@ export default {
                 ]
             }
         }
+    },
+    created: function() {
+        this.$store.dispatch('PROCESSING_SET_STATUS_USER_ACCOUNT');
+        this.$store.dispatch('PROCESSING_SET_STATUS_AUTH');
     }
 }
 </script>
