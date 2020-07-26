@@ -1,12 +1,10 @@
 <template>
     <div>
-      <v-app>
-        <humburger></humburger>
-        <app-header class="hidden-sm-and-down"></app-header>
-        <app-carousel></app-carousel>
-        <company-description></company-description>
-        <partners-list></partners-list>
-      </v-app>
+      <humburger />
+      <app-header class="hidden-sm-and-down" />
+      <app-carousel></app-carousel>
+      <company-description></company-description>
+      <partners-list></partners-list>
     </div>
 </template>
 
